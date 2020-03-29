@@ -17,7 +17,7 @@
 #elif defined(STM32F3xx) || defined(STM32F302x8) || defined(STM32F301x8) || defined(STM32F303xE)
 	#include <stm32f3xx_hal.h>
 	#define STMF3
-#elif defined(STM32L431xx)
+#elif defined(STM32L431xx) || defined(STM32L412xx)
 	#include "stm32l4xx_hal.h"
 	#define STML4
 #else
