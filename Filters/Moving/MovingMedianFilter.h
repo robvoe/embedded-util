@@ -1,5 +1,5 @@
 /*
- * MedianFilter.h
+ * MovingMedianFilter.h
  *
  *  Created on: 11.04.2019
  *      Author: Robert Voelckner
