@@ -29,6 +29,8 @@ namespace Util {
 
 
 			void MovingMedianFilterTest::performAllTests() {
+				performTest_ContainsEmptyElements();
+
 				performTest_DeleteInsertAtSameElement1();
 				performTest_DeleteInsertAtSameElement2();
 
@@ -41,11 +43,47 @@ namespace Util {
 				performTest_ComplexSequence1();
 			}
 
+			void MovingMedianFilterTest::performTest_ContainsEmptyElements() {
+				MovingMedianFilter<uint8_t, 5> medianFilter(0);
+
+				assertEquals( true, medianFilter.containsEmptyElements() );
+				assertEquals( 0, medianFilter._nonEmptyElementsCount );
+
+				medianFilter.process(1);
+				assertEquals( true, medianFilter.containsEmptyElements() );
+				assertEquals( 1, medianFilter._nonEmptyElementsCount );
+
+				medianFilter.process(2);
+				assertEquals( true, medianFilter.containsEmptyElements() );
+				assertEquals( 2, medianFilter._nonEmptyElementsCount );
+
+				medianFilter.process(3);
+				assertEquals( true, medianFilter.containsEmptyElements() );
+				assertEquals( 3, medianFilter._nonEmptyElementsCount );
+
+				medianFilter.process(4);
+				assertEquals( true, medianFilter.containsEmptyElements() );
+				assertEquals( 4, medianFilter._nonEmptyElementsCount );
+
+				medianFilter.process(5);
+				assertEquals( false, medianFilter.containsEmptyElements() );
+				assertEquals( 5, medianFilter._nonEmptyElementsCount );
+
+				medianFilter.process(6);
+				assertEquals( false, medianFilter.containsEmptyElements() );
+				assertEquals( 5, medianFilter._nonEmptyElementsCount );
+
+				medianFilter.process(7);
+				assertEquals( false, medianFilter.containsEmptyElements() );
+				assertEquals( 5, medianFilter._nonEmptyElementsCount );
+			}
+
 			void MovingMedianFilterTest::performTest_DeleteInsertAtSameElement1() {
 				MovingMedianFilter<uint8_t, 5> medianFilter(0);
 
 				medianFilter.process(1);
 				assertEquals( 0, medianFilter.getOutput() );
+				assertEquals( true, medianFilter.containsEmptyElements() );
 
 				// Check filter contents
 				assertEquals( { /*age*/ 2, /*data*/ 0 }, medianFilter._elements[0] );

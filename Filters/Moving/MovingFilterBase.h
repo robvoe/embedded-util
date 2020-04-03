@@ -18,8 +18,23 @@ namespace Util {
 			template <typename T = float>
 			class MovingFilterBase {
 				public:
+					/**
+					 * Processes an element and returns the filter output.
+					 */
 					virtual T process(T value) = 0;
+
+					/**
+					 * Returns the current filter output value.
+					 */
 					virtual T getOutput() = 0;
+
+					/**
+					 * Returns if the filter contains empty elements (i.e. zero values right after starting).
+					 *
+					 * @remark May be used to determine if the filter is in steady state.
+					 */
+					virtual bool containsEmptyElements() = 0;
+
 					virtual ~MovingFilterBase() {};
 
 			}; /* class FilterBase */

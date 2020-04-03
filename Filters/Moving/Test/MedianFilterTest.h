@@ -31,6 +31,8 @@ namespace Util {
 					static void assertEquals( uint32_t expected, uint32_t value );
 					template <typename T> static void assertEquals( T expected, T value );
 
+					static void performTest_ContainsEmptyElements();
+
 					static void performTest_DeleteInsertAtSameElement1();
 					static void performTest_DeleteInsertAtSameElement2();
 

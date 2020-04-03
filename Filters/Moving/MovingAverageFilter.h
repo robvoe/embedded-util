@@ -40,6 +40,7 @@ namespace Util {
 					uint_fast8_t _oldestElementNum = {0};  // "Points" to the oldest element which is going to be overridden on next invocation of "process(..)" function.
 					T            _sum;
 					T            _filterOutputValue;
+					uint_fast8_t _nonEmptyElementsCount = {0};  // Contains the number of non-empty elements in buffer. Grows (increases) until all elements contain process data.
 
 
 				public:
@@ -66,12 +67,21 @@ namespace Util {
 							_oldestElementNum = {0};
 						}
 
+						// Increase the amount of non-empty elements
+						if ( _nonEmptyElementsCount < Size ) {
+							_nonEmptyElementsCount++;
+						}
+
 						_filterOutputValue = _sum / Size;
 						return _filterOutputValue;
 					}
 
 					T getOutput() override {
 						return _filterOutputValue;
+					}
+
+					bool containsEmptyElements() override {
+						return _nonEmptyElementsCount < Size;
 					}
 
 			};

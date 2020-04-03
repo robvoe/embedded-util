@@ -48,6 +48,8 @@ namespace Util {
 					};
 					std::array<ElementType, Size>  _elements;
 
+					uint_fast8_t _nonEmptyElementsCount = {0};  // Contains the number of non-empty elements in buffer. Grows (increases) until all elements contain process data.
+
 				public:
 					MovingMedianFilter(T initValue = T{}) {
 						uint_fast8_t ageCounter = MinAge;
@@ -100,11 +102,20 @@ namespace Util {
 
 						} /* for ( uint_fast8_t i = 0; i<Size; i++) */
 
+						// Increase the amount of non-empty elements
+						if ( _nonEmptyElementsCount < Size ) {
+							_nonEmptyElementsCount++;
+						}
+
 						return _elements[FilterOutputIndex].data;
 					}
 
 					T getOutput() override {
 						return _elements[FilterOutputIndex].data;
+					}
+
+					bool containsEmptyElements() override {
+						return _nonEmptyElementsCount < Size;
 					}
 
 			};
