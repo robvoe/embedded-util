@@ -22,11 +22,11 @@ namespace Util {
 		class ArmInterruptPreventionMutex : public MutexBase {
 
 			public:
-				void ArmInterruptPreventionMutex() {
+				ArmInterruptPreventionMutex() {
 					__disable_irq();
 				}
 
-				void ~ArmInterruptPreventionMutex() {
+				~ArmInterruptPreventionMutex() {
 					__enable_irq();
 				}
 

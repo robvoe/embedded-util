@@ -14,7 +14,7 @@ namespace Util {
 	namespace Comparators {
 		
 		/// Defines the three possible state a comparator be in
-		enum class State {
+		enum class ComparatorState {
 			High,        ///< Comparator is initially in high state
 			Low,         ///< Comparator is initially in low state
 			Undefined    ///< Comparator is initially in undefined state
@@ -36,7 +36,7 @@ namespace Util {
 				/**
 				 * Returns the current state of the comparator.
 				 */
-				virtual State getState(void) = 0;
+				virtual ComparatorState getState(void) = 0;
 
 				
 				virtual ~ComparatorBase() {};

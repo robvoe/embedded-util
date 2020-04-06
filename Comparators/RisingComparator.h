@@ -25,16 +25,18 @@ namespace Util {
 				RisingComparator( const RisingComparator& other ) = delete;  // Copy constructor
 				RisingComparator( const RisingComparator&& other ) = delete; // Move constructor
 
-				T     _compareValue;
-				T     _compareHysteresis;
-				State _currentState;
+				ComparatorState _currentState;
 
 			public:
+				T     CompareValue;
+				T     CompareHysteresis;
+
+
 				/********************************* CONSTRUCTORS ********************************/
 
-				RisingComparator(T compareValue, T compareHysteresis, State initialState = State::Undefined) {
-					_compareValue = compareValue;
-					_compareHysteresis = compareHysteresis;
+				RisingComparator(T compareValue, T compareHysteresis, ComparatorState initialState = ComparatorState::Undefined) {
+					CompareValue = compareValue;
+					CompareHysteresis = compareHysteresis;
 					_currentState = initialState;
 				}
 
@@ -42,54 +44,21 @@ namespace Util {
 				/******************************** OVERRIDDEN LOGIC *****************************/
 
 				bool process(T value) override {
-					State oldState = _currentState;
+					ComparatorState oldState = _currentState;
 
-					if ( value >= _compareValue )
-						_currentState = State::High;
-					else if ( value < _compareValue - _compareHysteresis )
-						_currentState = State::Low;
+					if ( value >= CompareValue )
+						_currentState = ComparatorState::High;
+					else if ( value < CompareValue - CompareHysteresis )
+						_currentState = ComparatorState::Low;
 
 					return (oldState != _currentState);
 				}
 
-				State getState(void) override {
+				ComparatorState getState(void) override {
 					return _currentState;
 				}
 
 
-				/******************************** GETTERS/SETTERS ******************************/
-
-				/**
-				 * Returns the hysteresis value
-				 */
-				T getCompareHysteresis() const {
-					return _compareHysteresis;
-				}
-
-				/**
-				 * Sets the hysteresis value.
-				 *
-				 * @remark The user might want to call @see process() function afterwards.
-				 */
-				void setCompareHysteresis( T newHysteresis ) {
-					_compareHysteresis = newHysteresis;
-				}
-
-				/**
-				 * Returns the compare value
-				 */
-				T getCompareValue() const {
-					return _compareValue;
-				}
-
-				/**
-				 * Sets the compare value.
-				 *
-				 * @remark The user might want to call @see process() function afterwards.
-				 */
-				void setCompareValue( T newValue ) {
-					_compareValue = newValue;
-				}
 		}; /*class*/
 	
 	} /* namespace Comparators */
