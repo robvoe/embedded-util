@@ -39,7 +39,7 @@ namespace Util {
 					#ifdef STM32BUTTONDRIVER__DEBOUNCE_MILLIS
 						static constexpr uint32_t DebounceMillis = STM32BUTTONDRIVER__DEBOUNCE_MILLIS;
 					#else
-						static constexpr uint32_t DebounceMillis = 20;
+						static constexpr uint32_t DebounceMillis = 50;
 					#endif
 			} /*class*/;
 
