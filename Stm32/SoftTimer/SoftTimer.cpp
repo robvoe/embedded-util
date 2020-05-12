@@ -22,7 +22,8 @@ namespace Util {
 			const uint32_t currentTime = HAL_GetTick();
 			if ( currentTime-_countingStartedAt  >=  _intervalMillis ) {
 				_countingStartedAt = currentTime;
-				if ( _callback != nullptr )   _callback();
+				volatile const CallbackDefinition callback = _callback;
+				if ( callback != nullptr )   callback();
 			}
 		}
 
