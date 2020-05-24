@@ -71,13 +71,6 @@ namespace Util {
 						Internal::registerPersistentStorageInstance( (PersistentStorage<void*>*)this );
 					}
 
-					/**
-					 * Destructor. It must never be called since a @see PersistentStorage should exist during whole runtime!
-					 */
-					~PersistentStorage() {
-						while(1);  // ---> A PersistentStorage should exist during whole runtime and must never be destroyed!
-					}
-
 
 
 				public:
@@ -216,6 +209,13 @@ namespace Util {
 						RamContents.UserData = rhs;
 						isInitialized = true;  // Prevents lazy loading (of stale memory state) at next read access.
 						return *this;
+					}
+
+					/**
+					 * Destructor.
+					 */
+					~PersistentStorage() {
+						while(1);  // ---> A PersistentStorage should exist during whole runtime and must never be destroyed!
 					}
 
 			} /*class PersistentStorage*/;
