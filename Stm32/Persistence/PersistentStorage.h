@@ -65,10 +65,17 @@ namespace Util {
 						static_assert( std::is_pod<T>::value, "T must be Plain-Old-Data!" );
 						static_assert( sizeof(T)<=(UINT8_MAX*sizeof(uint32_t)), "Size of T must be <=1000!" );
 
-						// Initialisierungen durchführen
+						// Initialisierungen durchfï¿½hren
 						RamContents.Header.WholeStructSize = sizeof(UnderlyingMemoryBlock<T>)/sizeof(uint32_t);
 						RamContents.Header.UserDataSize = sizeof(T)/sizeof(uint32_t)  +  (/*The following "rounds" to full 32 bit words*/  sizeof(T)%sizeof(uint32_t) ? 1 : 0);
 						Internal::registerPersistentStorageInstance( (PersistentStorage<void*>*)this );
+					}
+
+					/**
+					 * Destructor. It must never be called since a @see PersistentStorage should exist during whole runtime!
+					 */
+					~PersistentStorage() {
+						while(1);  // ---> A PersistentStorage should exist during whole runtime and must never be destroyed!
 					}
 
 
@@ -162,19 +169,12 @@ namespace Util {
 					 *            	  	 - false: An error occurred.
 					 */
 					bool saveAllPersistentStorages(void) {
-						//if ( !isInitialized )  reloadFlashToRam();  ---->  Muss hier nicht erfolgen, da es in der Funktion "saveAllPersistentStorages()" für alle PersistentStorages durchgeführt wird
+						//if ( !isInitialized )  reloadFlashToRam();  ---->  Muss hier nicht erfolgen, da es in der Funktion "saveAllPersistentStorages()" fï¿½r alle PersistentStorages durchgefï¿½hrt wird
 						#ifdef STM32PERSISTENCE__DISABLE_WEAR_LEVELING
 							return Internal::saveAllPersistentStorages( true );
 						#else
 							return Internal::saveAllPersistentStorages( false );
 						#endif
-					}
-
-					/**
-					 * Destructor
-					 */
-					~PersistentStorage() {
-						while(1);  // ---> A PersistentStorage should exist during whole runtime and must never be destroyed!
 					}
 
 					/**
