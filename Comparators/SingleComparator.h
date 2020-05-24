@@ -11,8 +11,8 @@
  *
  *    The user may refer to the descriptive image file "RisingScheme.png".
  */
-#ifndef APPLICATION_USER_UTIL_COMPARATORS_RISINGCOMPARATOR_H_
-#define APPLICATION_USER_UTIL_COMPARATORS_RISINGCOMPARATOR_H_
+#ifndef APPLICATION_USER_UTIL_COMPARATORS_SINGLECOMPARATOR_H_
+#define APPLICATION_USER_UTIL_COMPARATORS_SINGLECOMPARATOR_H_
 
 #include "ComparatorBase.h"
 
@@ -20,10 +20,10 @@ namespace Util {
 	namespace Comparators {
 		
 		template <typename T = float>
-		class RisingComparator : public ComparatorBase<T> {
+		class SingleComparator : public ComparatorBase<T> {
 			private:
-				RisingComparator( const RisingComparator& other ) = delete;  // Copy constructor
-				RisingComparator( const RisingComparator&& other ) = delete; // Move constructor
+				SingleComparator( const SingleComparator& other ) = delete;  // Copy constructor
+				SingleComparator( const SingleComparator&& other ) = delete; // Move constructor
 
 				ComparatorState _currentState;
 
@@ -34,7 +34,7 @@ namespace Util {
 
 				/********************************* CONSTRUCTORS ********************************/
 
-				RisingComparator(T compareValue, T compareHysteresis, ComparatorState initialState = ComparatorState::Undefined) {
+				SingleComparator(T compareValue, T compareHysteresis, ComparatorState initialState = ComparatorState::Undefined) {
 					CompareValue = compareValue;
 					CompareHysteresis = compareHysteresis;
 					_currentState = initialState;
@@ -64,4 +64,4 @@ namespace Util {
 	} /* namespace Comparators */
 } /* namespace Util */
 
-#endif /* APPLICATION_USER_UTIL_COMPARATORS_RISINGCOMPARATOR_H_ */
+#endif /* APPLICATION_USER_UTIL_COMPARATORS_SINGLECOMPARATOR_H_ */
