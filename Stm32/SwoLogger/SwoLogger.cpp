@@ -16,7 +16,6 @@
 
 namespace Stm32 {
 	
-	SwoLogger::LogLevel SwoLogger::CurrentLogLevel = SwoLogger::LogLevel::Debug;
 
 	bool SwoLogger::isLogLevelSufficient(LogLevel logLevel) {
 		if ( logLevel >= CurrentLogLevel )
@@ -25,7 +24,7 @@ namespace Stm32 {
 	}
 
 
-	static bool swoEnabled() {
+	bool SwoLogger::swoEnabled() {
 		if (((ITM->TCR & ITM_TCR_ITMENA_Msk) != 0UL) &&      /* ITM enabled */
 			((ITM->TER & 1UL               ) != 0UL)   )     /* ITM Port #0 enabled */
 			return true;
@@ -47,37 +46,42 @@ namespace Stm32 {
 
 	void SwoLogger::transferMessage(LogLevel logLevel, const char *message) {
 		// Write current milliseconds time
-		using namespace StringUtil;
-		char timeBuffer[10];  // Reserves 10 places for the highest-possible uint32_t
-		uint32_t writtenCharCount = int32_to_string(HAL_GetTick(), timeBuffer, 10, false, ValueRadix::Decimal, false, false);
-		swoTransmit(timeBuffer, writtenCharCount);
-		swoTransmit("ms - ");
+		if ( EnableTimestampOutput ) {
+			using namespace StringUtil;
+			char timeBuffer[10];  // Reserves 10 places for the highest-possible uint32_t
+			uint32_t writtenCharCount = int32_to_string(HAL_GetTick(), timeBuffer, 10, false, ValueRadix::Decimal, false, false);
+			swoTransmit(timeBuffer, writtenCharCount);
+			swoTransmit("ms - ");
+		}
 
 		// Write log-level string
-		const char *logLevelPtr;
-		switch (logLevel) {
-			case LogLevel::Info:
-				logLevelPtr = LogLevelStringInfo;
-				break;
-			case LogLevel::Warning:
-				logLevelPtr = LogLevelStringWarning;
-				break;
-			case LogLevel::Error:
-				logLevelPtr = LogLevelStringError;
-				break;
-			case LogLevel::Debug:
-			default:
-				logLevelPtr = LogLevelStringDebug;
-				break;
+		if ( EnableLogLevelOutput ) {
+			const char *logLevelPtr;
+			switch (logLevel) {
+				case LogLevel::Info:
+					logLevelPtr = LogLevelStringInfo;
+					break;
+				case LogLevel::Warning:
+					logLevelPtr = LogLevelStringWarning;
+					break;
+				case LogLevel::Error:
+					logLevelPtr = LogLevelStringError;
+					break;
+				case LogLevel::Debug:
+				default:
+					logLevelPtr = LogLevelStringDebug;
+					break;
+			}
+			swoTransmit(logLevelPtr);
+			swoTransmit(" - ");
 		}
-		swoTransmit(logLevelPtr);
-		swoTransmit(" - ");
 
 		swoTransmit(message);
 	}
 
 
 	void SwoLogger::log(LogLevel logLevel, const char *message) {
+		if ( !Enabled )  return;
 		if ( !isLogLevelSufficient(logLevel) )  return;
 		if ( !swoEnabled() )  return;
 
@@ -86,6 +90,7 @@ namespace Stm32 {
 	}
 
 	void SwoLogger::log(LogLevel logLevel, const char *message, int32_t value) {
+		if ( !Enabled )  return;
 		if ( !isLogLevelSufficient(logLevel) )  return;
 		if ( !swoEnabled() )  return;
 
@@ -100,6 +105,7 @@ namespace Stm32 {
 	}
 
 	void SwoLogger::log(LogLevel logLevel, const char *message, float value) {
+		if ( !Enabled )  return;
 		if ( !isLogLevelSufficient(logLevel) )  return;
 		if ( !swoEnabled() )  return;
 
@@ -169,9 +175,5 @@ namespace Stm32 {
 		log(LogLevel::Error, message, value);
 	}
 
-
-	void SwoLogger::setLogLevel( LogLevel logLevel ) {
-		CurrentLogLevel = logLevel;
-	}
 
 } /* namespace Stm32 */

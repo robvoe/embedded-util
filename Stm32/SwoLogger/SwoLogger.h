@@ -24,19 +24,51 @@ namespace Stm32 {
 			};
 
 		private:
-			static LogLevel CurrentLogLevel;   ///< Contains the currently assigned LogLevel. Initially, it contains Debug
+			/******************************* SOME CONSTANTS ********************************/
 
-			static void swoTransmit(const char *s, int_fast16_t len = -1);
-			static void transferMessage(LogLevel logLevel, const char *message);
+			/// The assigned LogLevel. Only messages with LogLevel above of this will be output.
+			#ifndef SWO_LOGGER__LOG_LEVEL
+				static constexpr LogLevel CurrentLogLevel = LogLevel::Debug;
+			#else
+				static constexpr LogLevel CurrentLogLevel = SWO_LOGGER__LOG_LEVEL;
+			#endif
+
+
+			#ifndef SWO_LOGGER__ENABLE_TIMESTAMP_OUTPUT
+				static constexpr bool EnableTimestampOutput = true;
+			#else
+				static constexpr bool EnableTimestampOutput = SWO_LOGGER__ENABLE_TIMESTAMP_OUTPUT;
+			#endif
+
+
+			#ifndef SWO_LOGGER__ENABLE_LOG_LEVEL_OUTPUT
+				static constexpr bool EnableLogLevelOutput = true;
+			#else
+				static constexpr bool EnableLogLevelOutput = SWO_LOGGER__ENABLE_LOG_LEVEL_OUTPUT;
+			#endif
+
+			/// Definition whether to enable the log output
+			#ifndef SWO_LOGGER__ENABLED
+				#ifdef DEBUG
+					static constexpr bool Enabled = true;
+				#else
+					static constexpr bool Enabled = false;
+				#endif
+			#else
+				static constexpr bool Enabled = SWO_LOGGER__ENABLED;
+			#endif
+
+
+			/**************************** SOME PRIVATE FUNCTIONS ***************************/
+
+			static bool swoEnabled();                                                 ///< Returns if SWO is currently enabled
+			static void swoTransmit(const char *s, int_fast16_t len = -1);            ///< Transmits a string to SWO
+			static void transferMessage(LogLevel logLevel, const char *message);      ///< Builds up a log message and transfers it to SWO
+			static bool isLogLevelSufficient(LogLevel logLevel);                      ///< Used to check if current log-level allows to output a certain message
 
 			static void log(LogLevel logLevel, const char *message, int32_t value);
 			static void log(LogLevel logLevel, const char *message, float value);
 			static void log(LogLevel logLevel, const char *message);
-
-			/**
-			 * This function is used to implement a log-level filter.
-			 */
-			static bool isLogLevelSufficient(LogLevel logLevel);
 
 
 			/********************************** CONSTANTS **********************************/
@@ -55,8 +87,6 @@ namespace Stm32 {
 
 			
 			/********************************* GENERAL LOGIC *******************************/
-
-			static void setLogLevel( LogLevel logLevel );
 
 			static void debug(const char *message);
 			static void debug(const char *message, int32_t value);
