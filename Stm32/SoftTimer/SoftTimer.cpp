@@ -23,7 +23,7 @@ namespace Util {
 			if ( currentTime-_countingStartedAt  >=  _intervalMillis ) {
 				_countingStartedAt = currentTime;
 				volatile const CallbackDefinition callback = _callback;
-				if ( callback != nullptr )   callback();
+				if ( callback != nullptr )   callback(*this);
 			}
 		}
 

@@ -21,7 +21,7 @@ namespace Util {
 		class SoftTimer {
 
 			public:
-				typedef void (*CallbackDefinition)();
+				typedef void (*CallbackDefinition)(SoftTimer &);
 
 			private:
 				SoftTimer(SoftTimer&) = delete;
