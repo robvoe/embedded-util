@@ -11,6 +11,10 @@
 #ifndef APPLICATION_USER_UTIL_MUTEX_ARMINTERRUPTPREVENTIONMUTEX_H_
 #define APPLICATION_USER_UTIL_MUTEX_ARMINTERRUPTPREVENTIONMUTEX_H_
 
+
+#include "MutexBase.h"
+
+
 #ifdef __GNUC__
 	#include <cmsis_gcc.h>
 #else
