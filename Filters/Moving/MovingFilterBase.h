@@ -35,6 +35,12 @@ namespace Util {
 					 */
 					virtual bool containsEmptyElements() = 0;
 
+					/**
+					 * Invalidates current filter contents. @see ContainsEmptyElements() returns false until all
+					 * filter elements were updated/overwritten by new values.
+					 */
+					virtual void invalidate() = 0;
+
 					virtual ~MovingFilterBase() {};
 
 			}; /* class FilterBase */

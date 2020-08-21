@@ -118,6 +118,10 @@ namespace Util {
 						return _nonEmptyElementsCount < Size;
 					}
 
+					void invalidate() override {
+						_nonEmptyElementsCount = {0};
+					}
+
 			};
 
 		} /* namespace Moving */
